@@ -111,7 +111,7 @@ class PathPlanner:
                                 for idx_2 in range(len(self.waypoints[:idx])-2):
 
                                     if self.valid_segment(self.waypoints[idx_2], new_point):
-                                        
+
                                         self.waypoints = self.waypoints[:idx_2+1] + [new_point] + [self.goal_point]
 
                             # Return False if a point was added (path isn't done)
@@ -139,8 +139,10 @@ class PathPlanner:
 
     def move_invalid_goal(self):
 
+        # Find the slope angle of the path:
         slope_angle = self.calc_slope_angle(self.current_point, self.goal_point)
 
+        # If the goal position is in a hazard zone, move it towards the rover until it is safe:
         if not self.valid_point(self.goal_point, self.obstacles):
 
             new_goal = self.find_valid_point_helper(self.goal_point, slope_angle, -1)
