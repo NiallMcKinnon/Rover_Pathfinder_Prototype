@@ -46,7 +46,8 @@ class PathPlanner:
 
             path_finished = self.build_path()
 
-            print(self.iterations, self.resolution)
+            # print(self.iterations, self.resolution)
+            print(f"Iteration: {self.iterations:>4}         Current Resolution: {self.resolution:.2f}m")
 
             if self.iterations > 5000:
                 break
