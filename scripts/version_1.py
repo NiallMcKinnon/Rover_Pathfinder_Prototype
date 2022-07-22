@@ -10,8 +10,8 @@ class PathPlanner:
         self.graph_size = 50
         self.figure = plt.figure()
         self.ax = self.figure.add_subplot(111)
-        self.ax.set_xlim([0, self.graph_size])
-        self.ax.set_ylim([0, self.graph_size])
+        self.ax.set_xlim([-5, self.graph_size * 1.1])
+        self.ax.set_ylim([-5, self.graph_size * 1.1])
         self.num_obstacles = 3 * self.graph_size#300
         plt.axis("scaled")
         
@@ -28,6 +28,8 @@ class PathPlanner:
         self.obstacles = []
         self.build_hazards(self.num_obstacles)
         self.plot_hazards(self.obstacles)
+
+        plt.plot(self.goal_point[0], self.goal_point[1], 'c*')
 
         self.move_invalid_goal()
         self.waypoints = [self.current_point, self.goal_point]
@@ -230,8 +232,8 @@ class PathPlanner:
         
         for _ in range(amount):
 
-            y = random.uniform(2.0, self.graph_size-2.0)
-            x = random.uniform(2.0, self.graph_size-2.0)
+            y = random.uniform(2.0, self.graph_size)
+            x = random.uniform(2.0, self.graph_size)
 
             self.obstacles.append([x, y])
 
