@@ -1,4 +1,3 @@
-from tracemalloc import start
 import matplotlib.pyplot as plt
 import random
 import math
