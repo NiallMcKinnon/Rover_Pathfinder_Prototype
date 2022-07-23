@@ -29,7 +29,7 @@ class PathPlanner:
         self.build_hazards(self.num_obstacles)
         self.plot_hazards(self.obstacles)
 
-        plt.plot(self.goal_point[0], self.goal_point[1], 'c*')
+        plt.plot(self.goal_point[0], self.goal_point[1], 'b*')
 
         self.move_invalid_goal()
         self.waypoints = [self.current_point, self.goal_point]
@@ -46,7 +46,7 @@ class PathPlanner:
 
             path_finished = self.build_path()
 
-            print(f"Iteration: {self.iterations:>4}         Current Resolution: {self.resolution:.2f}m")
+            print(f"Iteration: {self.iterations:>4}\t\tCurrent Resolution: {self.resolution:.2f}m")
 
             if self.iterations > 5000:
                 break
@@ -87,7 +87,8 @@ class PathPlanner:
                     x = (step * math.cos(slope_angle)) + current_point[0]
                     y = (step * math.sin(slope_angle)) + current_point[1]
 
-                    step += self.resolution
+                    # This should stay the same even as resolution increases:
+                    step += 0.1 #self.resolution
 
                     # Check if the point is too close to an object:
                     for object in self.obstacles:
@@ -163,6 +164,7 @@ class PathPlanner:
             y = (step * math.sin(slope_angle)) + start_point[1]
 
             # Increase distance for next iteration:
+            # step += (0.1 * direction) #(self.resolution * direction)
             step += (self.resolution * direction)
 
             # If the point is valid, return it (extra is if the user wants additional MoE, may be removed)
@@ -183,13 +185,17 @@ class PathPlanner:
         distance = self.calc_distance(start_point, end_point)
 
         # Iterate along the line:
-        step = self.resolution
+        step = 0.1 #self.resolution
         while step < distance:
             
             # Calculate a point at the distance along the line:
-            x = (step * math.sin(slope_angle)) + start_point[0]
-            y = (step * math.cos(slope_angle)) + start_point[1]
-            step += self.resolution
+            x = (step * math.cos(slope_angle)) + start_point[0]
+            y = (step * math.sin(slope_angle)) + start_point[1]
+
+            # x = (step * math.sin(slope_angle)) + start_point[0]
+            # y = (step * math.cos(slope_angle)) + start_point[1]
+
+            step += 0.1 #self.resolution
 
             # If the point collides with an obstacle, return True
             if not self.valid_point([x, y], self.obstacles):
