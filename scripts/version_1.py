@@ -12,7 +12,7 @@ class PathPlanner:
         self.ax = self.figure.add_subplot(111)
         self.ax.set_xlim([-5, self.graph_size * 1.1])
         self.ax.set_ylim([-5, self.graph_size * 1.1])
-        self.num_obstacles = 3 * self.graph_size#300
+        self.num_obstacles = 4 * self.graph_size#300
         plt.axis("scaled")
         
         # These are parameters that can change
@@ -80,7 +80,7 @@ class PathPlanner:
                 distance = self.calc_distance(current_point, next_point)
 
                 # Step through the distance between the two points:
-                step = self.resolution
+                step = 0.1 # self.resolution
                 while step < distance:
 
                     # Calculate x and y at each distance along the line segment:
