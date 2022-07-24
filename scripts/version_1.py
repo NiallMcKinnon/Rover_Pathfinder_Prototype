@@ -16,9 +16,11 @@ class PathPlanner:
         plt.axis("scaled")
         
         # These are parameters that can change
-        self.resolution = 0.1 # 0.05
         self.robot_radius = 1.5
+        self.resolution = self.robot_radius / 10 #0.1
+        self.adjusted_resolution = self.resolution
         self.tolerance = self.robot_radius
+        self.loop_limit = 5000
 
         # Get current and goal positions
         self.current_point = [0, 0] # Will come from odometry
@@ -42,13 +44,13 @@ class PathPlanner:
 
             self.iterations += 1
 
-            self.resolution = self.resolution * (1 + (self.iterations / 5000))
+            self.adjusted_resolution = self.adjusted_resolution * (1 + (self.iterations / self.loop_limit))
 
             path_finished = self.build_path()
 
-            print(f"Iteration: {self.iterations:>4}\t\tCurrent Resolution: {self.resolution:.2f}m")
+            print(f"Iteration: {self.iterations:>4}\t\tCurrent Resolution: {self.adjusted_resolution:.2f}m")
 
-            if self.iterations > 5000:
+            if self.iterations > self.loop_limit:
                 break
         
         self.plot_path(self.waypoints, 'lime')
@@ -80,7 +82,7 @@ class PathPlanner:
                 distance = self.calc_distance(current_point, next_point)
 
                 # Step through the distance between the two points:
-                step = 0.1 # self.resolution
+                step = self.resolution # self.resolution
                 while step < distance:
 
                     # Calculate x and y at each distance along the line segment:
@@ -88,7 +90,7 @@ class PathPlanner:
                     y = (step * math.sin(slope_angle)) + current_point[1]
 
                     # This should stay the same even as resolution increases:
-                    step += 0.1 #self.resolution
+                    step += self.resolution #self.resolution
 
                     # Check if the point is too close to an object:
                     for object in self.obstacles:
@@ -165,7 +167,7 @@ class PathPlanner:
 
             # Increase distance for next iteration:
             # step += (0.1 * direction) #(self.resolution * direction)
-            step += (self.resolution * direction)
+            step += (self.adjusted_resolution * direction)
 
             # If the point is valid, return it (extra is if the user wants additional MoE, may be removed)
             if self.valid_point([x, y], self.obstacles):
@@ -185,7 +187,7 @@ class PathPlanner:
         distance = self.calc_distance(start_point, end_point)
 
         # Iterate along the line:
-        step = 0.1 #self.resolution
+        step = self.resolution #self.resolution
         while step < distance:
             
             # Calculate a point at the distance along the line:
@@ -195,7 +197,7 @@ class PathPlanner:
             # x = (step * math.sin(slope_angle)) + start_point[0]
             # y = (step * math.cos(slope_angle)) + start_point[1]
 
-            step += 0.1 #self.resolution
+            step += self.resolution #self.resolution
 
             # If the point collides with an obstacle, return True
             if not self.valid_point([x, y], self.obstacles):
