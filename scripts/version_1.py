@@ -104,11 +104,12 @@ class PathPlanner:
                             if self.valid_segment(self.current_point, new_point) and idx > 0:
 
                                 self.waypoints = [self.current_point, new_point, self.goal_point]
-                                # return True # This MIGHT improve the program. Rover testing needed.
+                                return False # This MIGHT improve the program. Rover testing needed.
                             
                             # Otherwise, insert the new point into the list:
                             else:
                                 self.waypoints.insert(idx+1, new_point)
+
 
                             if idx > 2:
                                 
