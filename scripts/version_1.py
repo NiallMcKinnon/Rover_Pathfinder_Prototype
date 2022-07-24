@@ -29,7 +29,7 @@ class PathPlanner:
         # On the rover, obstacles will come from the laser scan points
         self.obstacles = []
         self.build_hazards(self.num_obstacles)
-        self.plot_hazards(self.obstacles)
+        self.plot_hazards()
 
         plt.plot(self.goal_point[0], self.goal_point[1], 'b*')
 
@@ -246,9 +246,9 @@ class PathPlanner:
             self.obstacles.append([x, y])
 
     
-    def plot_hazards(self, obstacles):
+    def plot_hazards(self):
 
-        for object in obstacles:
+        for object in self.obstacles:
 
             plt.plot(object[0], object[1], 'k.')
 
